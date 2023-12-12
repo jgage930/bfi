@@ -1,3 +1,6 @@
+use interpreter::commands;
+
+use crate::interpreter::commands::Commands;
 use std::fs::File;
 use std::io::{BufReader, Read};
 
@@ -8,8 +11,8 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 fn main() -> Result<()> {
     let chars = read_file("test.bf")?;
-
-    println!("{:?}", chars);
+    let commands: Vec<Commands> = chars.iter().map(|c| Commands::from_char(*c)).collect();
+    println!("{:?}", commands);
 
     Ok(())
 }
