@@ -13,7 +13,39 @@ impl Interpreter {
         }
     }
 
+    pub fn pointer(&self) -> usize {
+        self.pointer
+    }
+
+    pub fn memory(&self) -> [u8; 3000] {
+        self.memory
+    }
+
     pub fn interpret(&mut self, commands: Vec<Commands>) {
-        todo!();
+        for command in commands.iter() {
+            match command {
+                Commands::Right => self.move_pointer_right(),
+                Commands::Left => self.move_pointer_left(),
+                Commands::Inc => self.increment(),
+                Commands::Dec => self.decrement(),
+                _ => {}
+            }
+        }
+    }
+
+    fn move_pointer_right(&mut self) {
+        self.pointer += 1;
+    }
+
+    fn move_pointer_left(&mut self) {
+        self.pointer -= 1;
+    }
+
+    fn increment(&mut self) {
+        self.memory[self.pointer] += 1;
+    }
+
+    fn decrement(&mut self) {
+        self.memory[self.pointer] -= 1;
     }
 }

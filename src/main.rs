@@ -1,4 +1,4 @@
-use interpreter::commands;
+use interpreter::interpreter::Interpreter;
 
 use crate::interpreter::commands::Commands;
 use std::fs::File;
@@ -12,7 +12,11 @@ pub type Result<T> = std::result::Result<T, Error>;
 fn main() -> Result<()> {
     let chars = read_file("test.bf")?;
     let commands: Vec<Commands> = chars.iter().map(|c| Commands::from_char(*c)).collect();
-    println!("{:?}", commands);
+
+    let mut interpreter = Interpreter::new();
+    interpreter.interpret(commands);
+
+    println!("{:?}", interpreter.memory());
 
     Ok(())
 }
