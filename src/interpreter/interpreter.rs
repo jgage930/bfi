@@ -1,4 +1,6 @@
 use crate::interpreter::commands::Commands;
+use crate::Result;
+use std::io;
 
 pub struct Interpreter {
     pointer: usize,
@@ -28,6 +30,8 @@ impl Interpreter {
                 Commands::Left => self.move_pointer_left(),
                 Commands::Inc => self.increment(),
                 Commands::Dec => self.decrement(),
+                Commands::Output => self.output(),
+                Commands::Input => self.input().expect("Failed to read char."),
                 _ => {}
             }
         }
@@ -47,5 +51,22 @@ impl Interpreter {
 
     fn decrement(&mut self) {
         self.memory[self.pointer] -= 1;
+    }
+
+    fn output(&self) {
+        print!("{}", self.memory[self.pointer] as char);
+    }
+
+    fn input(&mut self) -> Result<()> {
+        // prompt the user to input a single byte
+        let mut input = String::new();
+        io::stdin().read_line(&mut input)?;
+
+        // ! This only reads the first char from input.
+        if let Some(c) = input.chars().next() {
+            self.memory[self.pointer] = c as u8;
+        };
+
+        Ok(())
     }
 }

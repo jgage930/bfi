@@ -16,8 +16,6 @@ fn main() -> Result<()> {
     let mut interpreter = Interpreter::new();
     interpreter.interpret(commands);
 
-    println!("{:?}", interpreter.memory());
-
     Ok(())
 }
 
