@@ -32,9 +32,29 @@ fn parse_loop_indicies(codes: Vec<OpCode>) -> Vec<(usize, usize)> {
 
 fn parse(codes: Vec<OpCode>) -> Vec<Instruction> {
     // Turn a vec of op codes into a list of instructions.
-    let in_loop = false;
-    let instructions = Vec::new();
+    let mut loop_indicies = parse_loop_indicies(codes);
+    
+    for code in codes.iter() {
+        let instruction = match code {
+            OpCode::PointerRight => Instruction::PointerRight,
+            OpCode::PointerLeft  => Instruction::PointerLeft,
+            OpCode::Increment => Instruction::Increment,
+            OpCode::Decrement => Instruction::Decrement,
+            OpCode::Input => Instruction::Input,
+            OpCode::Output => Instruction::Output,
+            OpCode::StartLoop => {
+                let indices = loop_indicies.remove(0);
+                todo!()
+            },
+            OpCode::EndLoop => {
+                todo!()
+            },
+            OpCode::NA => Instruction::End,
+        }
+    }
 
+
+    let instructions = Vec::new();
     instructions
 }
 
@@ -72,7 +92,7 @@ mod tests {
     #[test]
     fn test_parse() {
         assert_eq!(
-            parse(testing_codes()),
+            parse(testing_codes(), vec![(2, 7)]),
             vec![
                 Instruction::Input,
                 Instruction::Increment,

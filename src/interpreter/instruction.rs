@@ -1,3 +1,5 @@
+use super::opcode::OpCode;
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Instruction {
     PointerRight,
@@ -7,4 +9,5 @@ pub enum Instruction {
     Input,
     Output,
     Loop(Vec<Instruction>),
+    End,
 }
