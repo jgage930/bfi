@@ -32,29 +32,56 @@ fn parse_loop_indicies(codes: Vec<OpCode>) -> Vec<(usize, usize)> {
 
 fn parse(codes: Vec<OpCode>) -> Vec<Instruction> {
     // Turn a vec of op codes into a list of instructions.
-    let mut loop_indicies = parse_loop_indicies(codes);
-    
-    for code in codes.iter() {
-        let instruction = match code {
-            OpCode::PointerRight => Instruction::PointerRight,
-            OpCode::PointerLeft  => Instruction::PointerLeft,
-            OpCode::Increment => Instruction::Increment,
-            OpCode::Decrement => Instruction::Decrement,
-            OpCode::Input => Instruction::Input,
-            OpCode::Output => Instruction::Output,
-            OpCode::StartLoop => {
-                let indices = loop_indicies.remove(0);
-                todo!()
-            },
-            OpCode::EndLoop => {
-                todo!()
-            },
-            OpCode::NA => Instruction::End,
+    let mut instructions: Vec<Instruction> = Vec::new();
+
+    let mut loop_stack = 0;
+    let mut loop_start = 0;
+
+    for (i, code) in codes.iter().enumerate() {
+        if loop_stack == 0 {
+            let instruction = match code {
+                OpCode::PointerRight => Some(Instruction::PointerRight),
+                OpCode::PointerLeft => Some(Instruction::PointerLeft),
+                OpCode::Increment => Some(Instruction::Increment),
+                OpCode::Decrement => Some(Instruction::Decrement),
+                OpCode::Output => Some(Instruction::Output),
+                OpCode::Input => Some(Instruction::Input),
+                OpCode::StartLoop => {
+                    loop_start = i;
+                    loop_stack += 1;
+                    None
+                }
+                OpCode::EndLoop => {
+                    panic!("Closing loop has no start!!");
+                }
+                OpCode::NA => Some(Instruction::End),
+            };
+
+            if let Some(ins) = instruction {
+                instructions.push(ins);
+            }
+        } else {
+            match code {
+                OpCode::StartLoop => {
+                    loop_stack += 1;
+                }
+                OpCode::EndLoop => {
+                    loop_stack -= 1;
+
+                    if loop_stack == 0 {
+                        instructions
+                            .push(Instruction::Loop(parse(codes[loop_start + 1..i].to_vec())));
+                    }
+                }
+                _ => {}
+            }
         }
     }
 
+    if loop_stack != 0 {
+        panic!("Unclosed loop!!")
+    }
 
-    let instructions = Vec::new();
     instructions
 }
 
@@ -92,7 +119,7 @@ mod tests {
     #[test]
     fn test_parse() {
         assert_eq!(
-            parse(testing_codes(), vec![(2, 7)]),
+            parse(testing_codes()),
             vec![
                 Instruction::Input,
                 Instruction::Increment,
