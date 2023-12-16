@@ -6,8 +6,8 @@ pub enum Commands {
     Dec,
     Output,
     Input,
-    JumpForward,
-    JumpBack,
+    StartLoop,
+    EndLoop,
     NA,
 }
 
@@ -20,8 +20,8 @@ impl Commands {
             '-' => Self::Dec,
             ',' => Self::Input,
             '.' => Self::Output,
-            '[' => Self::JumpForward,
-            ']' => Self::JumpBack,
+            '[' => Self::StartLoop,
+            ']' => Self::EndLoop,
             _ => Self::NA,
         }
     }
