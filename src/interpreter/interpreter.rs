@@ -1,5 +1,5 @@
-use crate::interpreter::commands::Commands;
 use crate::Result;
+use crate::{interpreter::commands::Commands, stack::Stack};
 use std::fs::File;
 use std::io::{self, BufReader, Read};
 
@@ -11,7 +11,7 @@ pub struct Interpreter {
     commands: Vec<Commands>,
     // Points to a position in the command vec
     cmd_pointer: usize,
-    stack: Vec<usize>,
+    stack: Stack<usize>,
 }
 
 impl Interpreter {
@@ -24,7 +24,7 @@ impl Interpreter {
             mem_pointer: 0,
             commands,
             cmd_pointer: 0,
-            stack: Vec::new(),
+            stack: Stack::new(),
         })
     }
 
@@ -96,7 +96,11 @@ impl Interpreter {
         if self.memory[self.mem_pointer] != 0 {
             self.next_command();
         } else {
-            // Jump to end of loop.
+            let end_index = self.stack.pop();
+
+            if let Some(i) = end_index {
+                self.cmd_pointer = i;
+            }
         }
     }
 
@@ -104,5 +108,7 @@ impl Interpreter {
         if let Some(i) = self.stack.pop() {
             self.cmd_pointer = i;
         }
+
+        self.stack.push(self.cmd_pointer);
     }
 }

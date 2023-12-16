@@ -3,15 +3,15 @@ pub struct Stack<T> {
 }
 
 impl<T> Stack<T> {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self { values: Vec::new() }
     }
 
-    fn push(&mut self, t: T) {
+    pub fn push(&mut self, t: T) {
         self.values.insert(0, t);
     }
 
-    fn pop(&mut self) -> Option<T> {
+    pub fn pop(&mut self) -> Option<T> {
         if self.values.len() == 0 {
             return None;
         }
