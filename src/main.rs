@@ -5,16 +5,17 @@ use std::fs::File;
 use std::io::{BufReader, Read};
 
 mod interpreter;
+mod stack;
 
 pub type Error = Box<dyn std::error::Error>;
 pub type Result<T> = std::result::Result<T, Error>;
 
 fn main() -> Result<()> {
-    let chars = read_file("test.bf")?;
-    let commands: Vec<Commands> = chars.iter().map(|c| Commands::from_char(*c)).collect();
-
-    let mut interpreter = Interpreter::new();
-    interpreter.interpret(commands);
+    // let chars = read_file("test.bf")?;
+    // let commands: Vec<Commands> = chars.iter().map(|c| Commands::from_char(*c)).collect();
+    //
+    // let mut interpreter = Interpreter::new();
+    // interpreter.interpret(commands);
 
     Ok(())
 }
