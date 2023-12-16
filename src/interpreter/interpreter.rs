@@ -39,6 +39,12 @@ impl Interpreter {
         Ok(chars)
     }
 
+    pub fn run(&mut self) {
+        while self.commands[self.cmd_pointer] != Commands::NA {
+            self.interpret();
+        }
+    }
+
     pub fn interpret(&mut self) {
         // Execute the command at command pointer.
         match self.commands[self.cmd_pointer] {
@@ -49,6 +55,7 @@ impl Interpreter {
             Commands::Output => self.output(),
             Commands::Input => self.input().expect("Failed to read char."),
             Commands::StartLoop => self.start_loop(),
+            Commands::EndLoop => self.end_loop(),
             _ => {}
         }
     }
@@ -59,22 +66,27 @@ impl Interpreter {
 
     fn move_pointer_right(&mut self) {
         self.mem_pointer += 1;
+        self.next_command();
     }
 
     fn move_pointer_left(&mut self) {
         self.mem_pointer -= 1;
+        self.next_command();
     }
 
     fn increment(&mut self) {
         self.memory[self.mem_pointer] += 1;
+        self.next_command();
     }
 
     fn decrement(&mut self) {
         self.memory[self.mem_pointer] -= 1;
+        self.next_command();
     }
 
-    fn output(&self) {
+    fn output(&mut self) {
         print!("{}", self.memory[self.mem_pointer] as char);
+        self.next_command();
     }
 
     fn input(&mut self) -> Result<()> {
@@ -86,6 +98,8 @@ impl Interpreter {
         if let Some(c) = input.chars().next() {
             self.memory[self.mem_pointer] = c as u8;
         };
+
+        self.next_command();
 
         Ok(())
     }
