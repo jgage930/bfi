@@ -6,7 +6,6 @@ use interpreter::{
 };
 
 mod interpreter;
-mod stack;
 
 pub type Error = Box<dyn std::error::Error>;
 pub type Result<T> = std::result::Result<T, Error>;
@@ -14,7 +13,7 @@ pub type Result<T> = std::result::Result<T, Error>;
 fn main() -> Result<()> {
     // read file into string
     let mut code = String::new();
-    let mut file = File::open("examples/hello_world.bf")?;
+    let mut file = File::open("examples/counter.bf")?;
     file.read_to_string(&mut code)?;
 
     let opcodes = lex(code);

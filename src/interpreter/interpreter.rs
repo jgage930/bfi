@@ -1,6 +1,6 @@
-use std::io::Read;
+use std::io;
 
-use super::instruction::{self, Instruction};
+use super::instruction::Instruction;
 
 pub struct Interpreter {
     instructions: Vec<Instruction>,
@@ -71,12 +71,14 @@ impl Interpreter {
     }
 
     fn input(&mut self) {
-        let mut input: [u8; 1] = [0; 1];
-        std::io::stdin()
-            .read_exact(&mut input)
-            .expect("Failed to input");
+        let mut input = String::new();
+        io::stdin()
+            .read_line(&mut input)
+            .expect("failed to read input");
 
-        self.memory[self.pointer] = input[0];
+        if let Some(c) = input.chars().next() {
+            self.memory[self.pointer] = c as u8;
+        }
     }
 
     fn loop_(&mut self, to_loop: &Vec<Instruction>) {

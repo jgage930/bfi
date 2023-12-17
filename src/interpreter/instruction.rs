@@ -1,6 +1,4 @@
-use super::opcode::OpCode;
-
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Instruction {
     PointerRight,
     PointerLeft,

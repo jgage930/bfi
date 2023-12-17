@@ -9,27 +9,6 @@ pub fn lex(input: String) -> Vec<OpCode> {
         .collect::<Vec<OpCode>>()
 }
 
-fn parse_loop_indicies(codes: Vec<OpCode>) -> Vec<(usize, usize)> {
-    let mut indicies = Vec::new();
-
-    let mut start_loop = None;
-    for (i, code) in codes.iter().enumerate() {
-        match code {
-            OpCode::StartLoop => {
-                start_loop = Some(i);
-            }
-            OpCode::EndLoop => {
-                if let Some(start_index) = start_loop {
-                    indicies.push((start_index, i));
-                }
-            }
-            _ => {}
-        }
-    }
-
-    indicies
-}
-
 pub fn parse(codes: Vec<OpCode>) -> Vec<Instruction> {
     // Turn a vec of op codes into a list of instructions.
     let mut instructions: Vec<Instruction> = Vec::new();
@@ -109,11 +88,6 @@ mod tests {
     #[test]
     fn test_lex() {
         assert_eq!(lex(testing_input()), testing_codes(),)
-    }
-
-    #[test]
-    fn test_loop_indicies() {
-        assert_eq!(parse_loop_indicies(testing_codes()), vec![(2, 7)])
     }
 
     #[test]
