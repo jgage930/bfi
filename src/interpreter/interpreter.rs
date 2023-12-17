@@ -1,4 +1,6 @@
-use super::instruction::Instruction;
+use std::io::Read;
+
+use super::instruction::{self, Instruction};
 
 pub struct Interpreter {
     instructions: Vec<Instruction>,
@@ -16,8 +18,12 @@ impl Interpreter {
     }
 
     pub fn run(&self) {
-        todo!();
+        for instruction in self.instructions.iter() {
+            Self::interpret(&instruction);
+        }
     }
+
+    fn interpret(instruction: &Instruction) {}
 
     fn pointer_right(&mut self) {
         self.pointer += 1;
@@ -40,10 +46,17 @@ impl Interpreter {
     }
 
     fn input(&mut self) {
-        todo!()
+        let mut input: [u8; 1] = [0; 1];
+        std::io::stdin()
+            .read_exact(&mut input)
+            .expect("Failed to input");
+
+        self.memory[self.pointer] = input[0];
     }
 
     fn loop_(&mut self) {
-        todo!()
+        while self.memory[self.pointer] != 0 {
+            todo!();
+        }
     }
 }
