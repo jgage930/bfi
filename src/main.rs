@@ -14,7 +14,7 @@ pub type Result<T> = std::result::Result<T, Error>;
 fn main() -> Result<()> {
     // read file into string
     let mut code = String::new();
-    let mut file = File::open("test.bf")?;
+    let mut file = File::open("examples/hello_world.bf")?;
     file.read_to_string(&mut code)?;
 
     let opcodes = lex(code);
