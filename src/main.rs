@@ -5,6 +5,7 @@ use interpreter::{
     interpreter::Interpreter,
 };
 
+mod cli;
 mod interpreter;
 
 pub type Error = Box<dyn std::error::Error>;
