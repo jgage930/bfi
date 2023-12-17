@@ -3,7 +3,7 @@
 
 ### Installation
 ```
-git clone
+git clone https://github.com/jgage930/bfi.git
 cd bfi
 cargo  install --path . && bfi --help 
 ```
