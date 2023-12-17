@@ -1,6 +1,6 @@
 use super::{instruction::Instruction, opcode::OpCode};
 
-fn lex(input: String) -> Vec<OpCode> {
+pub fn lex(input: String) -> Vec<OpCode> {
     // Turn the code from the file into a list of codes.
     input
         .chars()
@@ -30,7 +30,7 @@ fn parse_loop_indicies(codes: Vec<OpCode>) -> Vec<(usize, usize)> {
     indicies
 }
 
-fn parse(codes: Vec<OpCode>) -> Vec<Instruction> {
+pub fn parse(codes: Vec<OpCode>) -> Vec<Instruction> {
     // Turn a vec of op codes into a list of instructions.
     let mut instructions: Vec<Instruction> = Vec::new();
 

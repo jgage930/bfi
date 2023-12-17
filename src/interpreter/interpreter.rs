@@ -67,7 +67,7 @@ impl Interpreter {
     }
 
     fn output(&mut self) {
-        print!("{}", self.memory[self.pointer]);
+        print!("{}", self.memory[self.pointer] as char);
     }
 
     fn input(&mut self) {
